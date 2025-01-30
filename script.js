@@ -1,12 +1,14 @@
 let pontos = 0;
+let quadradinhosComprados = 0;
 const contadorDisplay = document.getElementById('contador');
 const cookie = document.getElementById('cookie');
 const quadradinhosContainer = document.getElementById('quadradinhos');
-const ganharButton = document.getElementById('ganhar');
+const comprarButton = document.getElementById('comprar');
+const informacaoDisplay = document.getElementById('informacao');
 
-// Função para atualizar o contador de pontos
+// Função para atualizar o contador de cookies
 function atualizarContador() {
-  contadorDisplay.textContent = `Pontos: ${pontos}`;
+  contadorDisplay.textContent = `Cookies: ${pontos}`;
 }
 
 // Função para gerar um quadradinho "clicando"
@@ -35,15 +37,28 @@ cookie.addEventListener('click', () => {
   atualizarContador();
 });
 
-// Função que simula "cliques automáticos"
-setInterval(() => {
-  pontos++;
-  gerarQuadradinho();
-  atualizarContador();
-}, 1000); // A cada 1 segundo
-
-// Botão de ganhar cookie
-ganharButton.addEventListener('click', () => {
-  pontos += 10;  // Você pode ajustar esse valor
-  atualizarContador();
+// Função para comprar quadrado
+comprarButton.addEventListener('click', () => {
+  if (pontos >= 10) {
+    pontos -= 10;  // Custo de 10 cookies por quadradinho
+    quadradinhosComprados++;
+    atualizarContador();
+    atualizarInformacao();
+  } else {
+    alert('Você precisa de 10 cookies para comprar um quadrado!');
+  }
 });
+
+// Função para atualizar a informação de quadradinhos comprados
+function atualizarInformacao() {
+  informacaoDisplay.textContent = `Quadradinhos comprados: ${quadradinhosComprados}`;
+}
+
+// Função que simula "cliques automáticos" com base nos quadradinhos comprados
+setInterval(() => {
+  if (quadradinhosComprados > 0) {
+    pontos += quadradinhosComprados; // Cada quadradinho gera 1 cookie por segundo
+    gerarQuadradinho();
+    atualizarContador();
+  }
+}, 1000);  // A cada 1 segundo
