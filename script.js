@@ -1,10 +1,15 @@
-let pontos = 0;
-let quadradinhosComprados = 0;
+// Recuperando dados salvos no localStorage
+let pontos = localStorage.getItem('pontos') ? parseInt(localStorage.getItem('pontos')) : 0;
+let quadradinhosComprados = localStorage.getItem('quadradinhosComprados') ? parseInt(localStorage.getItem('quadradinhosComprados')) : 0;
+let quadradinhoUpgrade = localStorage.getItem('quadradinhoUpgrade') ? parseInt(localStorage.getItem('quadradinhoUpgrade')) : 1;
+
+// Atualizando o contador e as informações na tela
 const contadorDisplay = document.getElementById('contador');
-const cookie = document.getElementById('cookie');
 const quadradinhosContainer = document.getElementById('quadradinhos');
 const comprarButton = document.getElementById('comprar');
 const informacaoDisplay = document.getElementById('informacao');
+const upgradeButton = document.getElementById('upgrade1');
+const upgradeInfoDisplay = document.getElementById('upgrade-info');
 
 // Função para atualizar o contador de cookies
 function atualizarContador() {
@@ -31,10 +36,11 @@ function gerarQuadradinho() {
 }
 
 // Evento de clique no cookie
-cookie.addEventListener('click', () => {
+document.getElementById('cookie').addEventListener('click', () => {
   pontos++;
   gerarQuadradinho();
   atualizarContador();
+  salvarProgresso();
 });
 
 // Função para comprar quadrado
@@ -44,21 +50,55 @@ comprarButton.addEventListener('click', () => {
     quadradinhosComprados++;
     atualizarContador();
     atualizarInformacao();
+    salvarProgresso();
   } else {
     alert('Você precisa de 10 cookies para comprar um quadrado!');
   }
 });
 
-// Função para atualizar a informação de quadradinhos comprados
+// Função para atualizar as informações de quadradinhos comprados
 function atualizarInformacao() {
   informacaoDisplay.textContent = `Quadradinhos comprados: ${quadradinhosComprados}`;
 }
 
-// Função que simula "cliques automáticos" com base nos quadradinhos comprados
+// Função para comprar upgrade
+upgradeButton.addEventListener('click', () => {
+  if (pontos >= 50 && quadradinhoUpgrade < 5) {  // Limite de 5 upgrades
+    pontos -= 50;
+    quadradinhoUpgrade++;
+    salvarProgresso();
+    atualizarContador();
+    atualizarUpgradeInfo();
+  } else if (quadradinhoUpgrade >= 5) {
+    alert('Você já atingiu o limite de upgrades!');
+  } else {
+    alert('Você precisa de 50 cookies para o upgrade!');
+  }
+});
+
+// Função para atualizar as informações do upgrade
+function atualizarUpgradeInfo() {
+  upgradeInfoDisplay.textContent = `Upgrade de quadradinho: Nível ${quadradinhoUpgrade}`;
+}
+
+// Função para salvar o progresso
+function salvarProgresso() {
+  localStorage.setItem('pontos', pontos);
+  localStorage.setItem('quadradinhosComprados', quadradinhosComprados);
+  localStorage.setItem('quadradinhoUpgrade', quadradinhoUpgrade);
+}
+
+// Função que simula "cliques automáticos" com base nos quadradinhos comprados e upgrades
 setInterval(() => {
   if (quadradinhosComprados > 0) {
-    pontos += quadradinhosComprados; // Cada quadradinho gera 1 cookie por segundo
+    pontos += quadradinhosComprados * quadradinhoUpgrade; // Cada quadradinho gera mais cookies com o upgrade
     gerarQuadradinho();
     atualizarContador();
+    salvarProgresso();
   }
 }, 1000);  // A cada 1 segundo
+
+// Inicializando as informações na tela
+atualizarContador();
+atualizarInformacao();
+atualizarUpgradeInfo();
