@@ -1,0 +1,65 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #f8f8f8;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-top: 20px;
+}
+
+#contador {
+  font-size: 1.5rem;
+  margin-top: 10px;
+}
+
+#cookie-container {
+  position: relative;
+  display: inline-block;
+  margin-top: 30px;
+}
+
+#cookie {
+  width: 150px;
+  height: 150px;
+  cursor: pointer;
+}
+
+#quadradinhos {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.quadradinho {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: #ffdf00;
+  animation: clicar 1s infinite;
+}
+
+@keyframes clicar {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 20px;
+  cursor: pointer;
+  margin-top: 20px;
+}
